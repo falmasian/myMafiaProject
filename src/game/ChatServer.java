@@ -69,6 +69,28 @@ public class ChatServer {
                         e.printStackTrace();
                     }
                     votesMap =newListForVoting();
+                    for (UserThread user :userThreads){
+                        user.setTask(Task.VOTING);
+                        pool.execute(user);
+                    }
+                    pool.shutdown();
+                    try {
+                        pool.awaitTermination(30, TimeUnit.SECONDS);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Map.Entry<String, Integer> maxEntry = null;
+
+                    for (Map.Entry<String, Integer> entry : votesMap.entrySet())
+                    {
+                        if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0)
+                        {
+                            maxEntry = entry;
+                        }
+                    }
+                    UserThread user =findUserByName(maxEntry.getKey());
+                    removeUser(maxEntry.getKey(),user);
+
 
 
 
@@ -114,6 +136,14 @@ public class ChatServer {
             }
         }
         return  name;
+    }
+    public UserThread findUserByName (String name){
+        UserThread user = null;
+        for (UserThread userThread :userThreads){
+
+            if (userThread.getUserName().equalsIgnoreCase(name)){ user=userThread;}
+        }
+        return user;
     }
 //    public ArrayList<String>  nameOfSimpleMafias(){
 //        ArrayList<String> =

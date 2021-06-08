@@ -5,6 +5,7 @@ import java.net.*;
 import java.util.*;
 
 public class UserThread extends Thread {
+    private String userName;
     private Socket socket;
     private ChatServer server;
     private PrintWriter writer;
@@ -15,6 +16,10 @@ public class UserThread extends Thread {
         this.socket = socket;
         this.server = server;
         this.roll = roll;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 
     public void setTask(Task task) {
@@ -101,8 +106,8 @@ public class UserThread extends Thread {
             for (UserThread user : deads) {
                 serverMessage += user.getName() + " ";
 
-                serverMessage = "[" + userName + "]: " + clientMessage;
-                server.broadcast(serverMessage, this);
+                serverMessage = "[" + userName + "]: " + serverMessage;
+                server.sendToSpecial(this.getName(), serverMessage);
             }
         }
         serverMessage += "\nMORNING\n";
