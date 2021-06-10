@@ -1,9 +1,11 @@
 package game;
 
 public class DieHard extends Citizen{
-    String rollName ="Die Hard";
 
-    public String getRollName() {
-        return rollName;
+
+    public DieHard(String rollName) {
+        super(rollName);
     }
+
+
 }

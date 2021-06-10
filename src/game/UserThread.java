@@ -54,6 +54,8 @@ public class UserThread extends Thread {
                 server.addUserName(userName);
                 serverMessage = "New user connected: " + userName;
                 server.broadcast(serverMessage, this);
+                serverMessage="your roll is :" + roll.getRollName();
+                server.sendToSpecial(userName,serverMessage);
             } else if (task == Task.START) {
 
                 startGame(reader, userName);

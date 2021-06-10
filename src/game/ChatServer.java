@@ -211,28 +211,28 @@ public class ChatServer {
 
     public  void createRolls(){
         int remainPlayers =numberOfPlayer;
-         rolls.add(new DrLecter());
+         rolls.add(new DrLecter("Dr.Lecter"));
          remainPlayers--;
-         rolls.add(new Professional());
+         rolls.add(new Professional("Professional"));
          remainPlayers--;
-         rolls.add(new Psychologist());
+         rolls.add(new Psychologist("Psychologist"));
          remainPlayers--;
-        rolls.add(new Godfather());
+        rolls.add(new Godfather("Godfather"));
         remainPlayers--;
-        rolls.add(new Detective());
+        rolls.add(new Detective("Detective"));
         remainPlayers--;
-        rolls.add(new DieHard());
+        rolls.add(new DieHard("DieHard"));
         remainPlayers--;
-        rolls.add(new Doctor());
-        rolls.add(new Mayor());
+        rolls.add(new Doctor("Doctor"));
+        rolls.add(new Mayor("Mayor"));
         remainPlayers--;
         int num=remainPlayers/3;
         for (int i=0;i<num;i++){
-            rolls.add(new SimpleMafia());
+            rolls.add(new SimpleMafia("Simple Mafia"));
             remainPlayers--;
         }
         for (int i=remainPlayers;i>=0;i--){
-            rolls.add(new SimpleCitizen());
+            rolls.add(new SimpleCitizen("Simple Citizen"));
         }
         Collections.shuffle(rolls);
     }
