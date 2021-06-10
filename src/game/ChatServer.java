@@ -37,6 +37,18 @@ public class ChatServer {
                 currentNumberOfPlayers++;
                 ExecutorService pool = Executors.newCachedThreadPool();
                 for (UserThread user :userThreads){
+                    user.setTask(Task.REGISTER);
+                    pool.execute(user);
+                }
+//                if (getWhoSentStarts()==getNumberOfPlayer()){
+                pool.shutdown();
+                try {
+                    pool.awaitTermination(1, TimeUnit.DAYS);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                for (UserThread user :userThreads){
                     user.setTask(Task.START);
                     pool.execute(user);
                 }

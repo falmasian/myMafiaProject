@@ -37,35 +37,35 @@ public class UserThread extends Thread {
 
             OutputStream output = socket.getOutputStream();
             writer = new PrintWriter(output, true);
-
-            printUsers();
-
-            String userName = reader.readLine();
-            while (true) {
-                if (server.getUserNames().contains(userName)) {
-                    userName = reader.readLine();
-                } else break;
-            }
-            server.addUserName(userName);
-            String serverMessage = "";
-            // serverMessage = "New user connected: " + userName;
-            //server.broadcast(serverMessage, this);
-
             String clientMessage;
+            String serverMessage = "";
+
 
             //do{
-                if (task == Task.START) {
+            if (task == Task.REGISTER) {
+                printUsers();
 
-                    startGame(reader, userName);
-                } else if (task == Task.FIRST_NIGHT) {
-                    introduceNight(reader, userName);
-                } else if (task == Task.DAY) {
-                    day(reader, userName);
-                } else if (task == Task.VOTING) {
-                    voting(reader, userName);
-                } else if (task == Task.NIGHT) {
-                    night(reader, userName);
+                String userName = reader.readLine();
+                while (true) {
+                    if (server.getUserNames().contains(userName)) {
+                        userName = reader.readLine();
+                    } else break;
                 }
+                server.addUserName(userName);
+                serverMessage = "New user connected: " + userName;
+                server.broadcast(serverMessage, this);
+            } else if (task == Task.START) {
+
+                startGame(reader, userName);
+            } else if (task == Task.FIRST_NIGHT) {
+                introduceNight(reader, userName);
+            } else if (task == Task.DAY) {
+                day(reader, userName);
+            } else if (task == Task.VOTING) {
+                voting(reader, userName);
+            } else if (task == Task.NIGHT) {
+                night(reader, userName);
+            }
 
 
 //
@@ -73,28 +73,28 @@ public class UserThread extends Thread {
 //                serverMessage = "[" + userName + "]: " + clientMessage;
 //                server.broadcast(serverMessage, this);
 
-            } catch(IOException e){
-                e.printStackTrace();
-            }
-            //while (!clientMessage.equals("exit")) ;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //while (!clientMessage.equals("exit")) ;
 
-            server.removeUser(userName, this);
-            socket.close();
-
-            serverMessage = userName + " has quitted.";
-            server.broadcast(serverMessage, this);
+//        server.removeUser(userName, this);
+//        socket.close();
+//
+//        serverMessage = userName + " has quitted.";
+//        server.broadcast(serverMessage, this);
 
         // catch (IOException ex) {
-         //   System.out.println("Error in UserThread: " + ex.getMessage());
+        //   System.out.println("Error in UserThread: " + ex.getMessage());
         //    ex.printStackTrace();
-        }
-  //  }
+    }
+    //  }
 
     private void voting(BufferedReader reader, String userName) throws IOException {
         String clientMessage;
         String serverMessage = " \" VOTING \" \n Enter a player's name : ";
         server.sendToSpecial(this.getName(), serverMessage);
-        clientMessage =reader.readLine();
+        clientMessage = reader.readLine();
         server.getVotesMap().put(clientMessage, server.getVotesMap().get(clientMessage) + 1);
     }
 
