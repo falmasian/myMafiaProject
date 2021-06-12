@@ -3,6 +3,7 @@ package game;
 
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 
 /**
  * This thread is responsible for reading user's input and send it
@@ -31,19 +32,20 @@ public class WriteThread extends Thread {
 
     public void run() {
 
-        Console console = System.console();
+        Scanner scanner =new  Scanner(System.in);
 
-        String userName = console.readLine("\nEnter your name: ");
-        client.setUserName(userName);
-        writer.println(userName);
-
-        String text;
+//       String userName = console.readLine("\nEnter your name: ");
+//       client.setUserName(userName);
+//        writer.println(userName);
+//
+   String text;
 
         do {
-            text = console.readLine("[" + userName + "]: ");
+          //  "[" + userName + "]: "
+            text = scanner.nextLine();
             writer.println(text);
 
-        } while (!text.equals("bye"));
+        } while (!text.equalsIgnoreCase("exit"));
 
         try {
             socket.close();

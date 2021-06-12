@@ -5,8 +5,21 @@ public  class Roll {
   private   boolean isAlive=true;
   private  boolean inVoting=false;
   private String rollName;
+  private boolean beQuietduringTheDay=false;
+
+ public boolean isBeQuietduringTheDay() {
+  return beQuietduringTheDay;
+ }
+
+ public void setBeQuietduringTheDay(boolean beQuietduringTheDay) {
+  this.beQuietduringTheDay = beQuietduringTheDay;
+ }
 
  public Roll(String rollName) {
+  this.rollName = rollName;
+ }
+
+ public void setRollName(String rollName) {
   this.rollName = rollName;
  }
 

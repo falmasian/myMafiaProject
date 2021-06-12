@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class ChatClient {
     private String hostname;
     private int port;
-    private String userName;
+//    private String userName;
 
     public ChatClient(String hostname) {
         this.hostname = hostname;
@@ -33,13 +33,13 @@ public class ChatClient {
 
     }
 
-    void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    String getUserName() {
-        return this.userName;
-    }
+//    void setUserName(String userName) {
+//        this.userName = userName;
+//    }
+//
+//    String getUserName() {
+//        return this.userName;
+//    }
 
 
     public static void main(String[] args) {
