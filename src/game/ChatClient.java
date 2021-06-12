@@ -47,7 +47,7 @@ public class ChatClient {
 
 //        String hostname = args[0];
 
-        String hostname ="127.0.1.1";
+        String hostname ="127.0.0.1";
         ChatClient client = new ChatClient(hostname);
         client.execute();
     }

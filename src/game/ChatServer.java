@@ -18,6 +18,8 @@ public class ChatServer {
     private  List<Roll> rolls=new ArrayList<>();
     private List<UserThread> lastNightDead =new ArrayList<>();
     private HashMap<String,Integer> votesMap;
+    private UserThread drlecteSave;
+
 
     public ChatServer(int port) {
         this.port = port;
@@ -47,47 +49,50 @@ public class ChatServer {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
+                ExecutorService pool1 = Executors.newCachedThreadPool();
                 for (UserThread user :userThreads){
                     user.setTask(Task.START);
-                    pool.execute(user);
+                    pool1.execute(user);
                 }
 //                if (getWhoSentStarts()==getNumberOfPlayer()){
-                pool.shutdown();
+                pool1.shutdown();
                 try {
-                    pool.awaitTermination(1, TimeUnit.DAYS);
+                    pool1.awaitTermination(1, TimeUnit.DAYS);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                ExecutorService pool2 = Executors.newCachedThreadPool();
                 for (UserThread user :userThreads){
                     user.setTask(Task.FIRST_NIGHT);
-                    pool.execute(user);
+                    pool2.execute(user);
                 }
-                pool.shutdown();
+                pool2.shutdown();
                 try {
-                    pool.awaitTermination(1, TimeUnit.DAYS);
+                    pool2.awaitTermination(1, TimeUnit.DAYS);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 while (!endOfGame()){
+                    ExecutorService pool3 = Executors.newCachedThreadPool();
                     for (UserThread user :userThreads){
                         user.setTask(Task.DAY);
-                        pool.execute(user);
+                        pool3.execute(user);
                     }
-                    pool.shutdown();
+                    pool3.shutdown();
                     try {
-                        pool.awaitTermination(5, TimeUnit.MINUTES);
+                        pool3.awaitTermination(5, TimeUnit.MINUTES);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     votesMap =newListForVoting();
+                    ExecutorService pool4 = Executors.newCachedThreadPool();
                     for (UserThread user :userThreads){
                         user.setTask(Task.VOTING);
-                        pool.execute(user);
+                        pool4.execute(user);
                     }
-                    pool.shutdown();
+                    pool4.shutdown();
                     try {
-                        pool.awaitTermination(30, TimeUnit.SECONDS);
+                        pool4.awaitTermination(30, TimeUnit.SECONDS);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -117,6 +122,7 @@ public class ChatServer {
             ex.printStackTrace();
         }
     }
+
     void broadcast(String message, UserThread excludeUser) {
         for (UserThread aUser : userThreads) {
             if (aUser != excludeUser) {
@@ -295,5 +301,24 @@ public class ChatServer {
             {alive++;}
         }
         return alive;
+    }
+
+    public UserThread getDrlecteSave() {
+        return drlecteSave;
+    }
+
+    public void setDrlecteSave(UserThread drlecteSave) {
+        this.drlecteSave=null;
+        this.drlecteSave = drlecteSave;
+    }
+    public  void writeToFile(String text){
+        try(FileWriter fw = new FileWriter("dailyChatFile.txt", true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw))
+        {
+            out.println(text);
+        } catch (IOException e) {
+            //exception handling left as an exercise for the reader
+        }
     }
 }
