@@ -75,10 +75,10 @@ public class ChatServer {
 
             System.out.println("Chat Server is listening on port " + port);
 
+                createRolls();
             while (currentNumberOfPlayers < numberOfPlayer) {
                 Socket socket = serverSocket.accept();
                 System.out.println("New user connected");
-                createRolls();
                 UserThread newUser = new UserThread(socket, this, rolls.get(0));
                 rolls.remove(0);
                 userThreads.add(newUser);
@@ -110,6 +110,7 @@ public class ChatServer {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            if (whoSentStarts==numberOfPlayer){
             ExecutorService pool2 = Executors.newCachedThreadPool();
             for (UserThread user : userThreads) {
                 user.setTask(Task.FIRST_NIGHT);
@@ -120,7 +121,7 @@ public class ChatServer {
                 pool2.awaitTermination(1, TimeUnit.DAYS);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
+            }}
             while (!endOfGame()) {
                 ExecutorService pool3 = Executors.newCachedThreadPool();
                 for (UserThread user : userThreads) {

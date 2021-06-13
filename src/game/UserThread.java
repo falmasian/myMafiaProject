@@ -16,6 +16,7 @@ public class UserThread extends Thread {
         this.socket = socket;
         this.server = server;
         this.roll = roll;
+
     }
 
     public String getUserName() {
@@ -47,7 +48,7 @@ public class UserThread extends Thread {
                 serverMessage="Enter your user name:";
                 sendMessage(serverMessage);
 
-                String userName = reader.readLine();
+                 userName = reader.readLine();
                 while (true) {
                     if (server.getUserNames().contains(userName)) {
                         serverMessage="The name you selected is a duplicate. Enter another name ";
@@ -63,15 +64,15 @@ public class UserThread extends Thread {
                 sendMessage(serverMessage);
             } else if (task == Task.START) {
 
-                startGame(reader, userName);
+                startGame(reader);
             } else if (task == Task.FIRST_NIGHT) {
-                introduceNight(reader, userName);
+                introduceNight(reader);
             } else if (task == Task.DAY) {
-                day(reader, userName);
+                day(reader);
             } else if (task == Task.VOTING) {
-                voting(reader, userName);
+                voting(reader);
             } else if (task == Task.NIGHT) {
-                night(reader, userName);
+                night(reader);
             }
 
 
@@ -96,7 +97,7 @@ public class UserThread extends Thread {
         //    ex.printStackTrace();
     }
 
-    private void night(BufferedReader reader, String userName) throws IOException {
+    private void night(BufferedReader reader) throws IOException {
         String serverMessage = "\"NIGHT \"";
         String clientMessage;
        // server.sendToSpecial(userName, serverMessage);
@@ -281,7 +282,7 @@ public class UserThread extends Thread {
 
 
 
-    private void voting(BufferedReader reader, String userName) throws IOException {
+    private void voting(BufferedReader reader) throws IOException {
         String clientMessage;
         String serverMessage = " \" VOTING \" \n Enter a player's name : ";
        // server.sendToSpecial(this.getName(), serverMessage);
@@ -302,7 +303,7 @@ public class UserThread extends Thread {
             }
         }
     }
-    private void day(BufferedReader reader, String userName) throws IOException {
+    private void day(BufferedReader reader) throws IOException {
         List<UserThread> deads = server.getLastNightDead();
         String clientMessage;
         String serverMessage = "players who dead last night:";
@@ -360,7 +361,7 @@ public class UserThread extends Thread {
 
     }
 
-    private void startGame(BufferedReader reader, String userName) {
+    private void startGame(BufferedReader reader) {
         String serverMessage = "Time to start game!\n" + "Enter start if you are ready:\n";
         String clientMessage;
        // server.sendToSpecial(userName, serverMessage);
@@ -372,7 +373,7 @@ public class UserThread extends Thread {
         }
     }
 
-    private void introduceNight(BufferedReader reader, String userName) {
+    private void introduceNight(BufferedReader reader) {
         String serverMessage = "Introduction".toUpperCase(Locale.ROOT) + "NIGHT\n" + "Mafias introduce your rolls:\n";
         String clientMessage;
       //  server.sendToSpecial(userName, serverMessage);
