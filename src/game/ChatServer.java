@@ -18,11 +18,27 @@ public class ChatServer {
     private int readyToVote = 0;
     private List<Roll> rolls = new ArrayList<>();
     private List<UserThread> lastNightDead = new ArrayList<>();
+    private List<UserThread> wholeDead = new ArrayList<>();
     private HashMap<String, Integer> votesMap;
     private UserThread drlecteSave;
     private UserThread doctorSave;
     private UserThread whoGodKilled;
     private UserThread whoProfKilled;
+    private boolean cancelVoting=false;
+
+    public List<UserThread> getWholeDead() {
+        return wholeDead;
+    }
+    public void addWholeDead(UserThread userThread){
+        wholeDead.add(userThread);
+    }
+    public boolean isCancelVoting() {
+        return cancelVoting;
+    }
+
+    public void setCancelVoting(boolean cancelVoting) {
+        this.cancelVoting = cancelVoting;
+    }
 
     public UserThread getWhoProfKilled() {
         return whoProfKilled;
@@ -66,20 +82,22 @@ public class ChatServer {
                 UserThread newUser = new UserThread(socket, this, rolls.get(0));
                 rolls.remove(0);
                 userThreads.add(newUser);
+                newUser.setTask(Task.REGISTER);
+                newUser.start();
                 currentNumberOfPlayers++;
             }
-            ExecutorService pool = Executors.newCachedThreadPool();
-            for (UserThread user : userThreads) {
-                user.setTask(Task.REGISTER);
-                pool.execute(user);
-            }
-//                if (getWhoSentStarts()==getNumberOfPlayer()){
-            pool.shutdown();
-            try {
-                pool.awaitTermination(1, TimeUnit.DAYS);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            ExecutorService pool = Executors.newCachedThreadPool();
+//            for (UserThread user : userThreads) {
+//                user.setTask(Task.REGISTER);
+//                pool.execute(user);
+//            }
+////                if (getWhoSentStarts()==getNumberOfPlayer()){
+//            pool.shutdown();
+//            try {
+//                pool.awaitTermination(1, TimeUnit.DAYS);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
             ExecutorService pool1 = Executors.newCachedThreadPool();
             for (UserThread user : userThreads) {
                 user.setTask(Task.START);
@@ -132,6 +150,7 @@ public class ChatServer {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                if (cancelVoting==true){
                 Map.Entry<String, Integer> maxEntry = null;
 
                 for (Map.Entry<String, Integer> entry : votesMap.entrySet()) {
@@ -140,12 +159,15 @@ public class ChatServer {
                     }
                 }
                 UserThread user = findUserByName(maxEntry.getKey());
-                removeUser(maxEntry.getKey(), user);
+                removeUser(maxEntry.getKey(), user);}
+                for (UserThread userThread :userThreads){
+                    userThread.getRoll().setBeQuietduringTheDay(false);
+                }
 
                 ExecutorService pool5 = Executors.newCachedThreadPool();
                 for (UserThread user1 : userThreads) {
-                    user.setTask(Task.NIGHT);
-                    pool5.execute(user);
+                    user1.setTask(Task.NIGHT);
+                    pool5.execute(user1);
                 }
                 pool4.shutdown();
                 try {
@@ -323,13 +345,7 @@ public class ChatServer {
         }
     }
 
-    public static void main(String[] args) {
-        int port = 5000;
-        ChatServer chatServer = new ChatServer(port);
-        chatServer.execute();
 
-
-    }
 
     public HashMap newListForVoting() {
         votesMap = new HashMap<>();
@@ -361,6 +377,7 @@ public class ChatServer {
 
     public void addLastNightDead(UserThread userThread) {
         this.lastNightDead.add(userThread);
+        addWholeDead(userThread);
     }
 
     public List<UserThread> getLastNightDead() {
@@ -411,5 +428,14 @@ public class ChatServer {
         } catch (IOException e) {
             //exception handling left as an exercise for the reader
         }
+    }
+
+
+    public static void main(String[] args) {
+        int port = 5005;
+        ChatServer chatServer = new ChatServer(port);
+        chatServer.execute();
+
+
     }
 }
