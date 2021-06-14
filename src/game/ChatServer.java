@@ -98,114 +98,114 @@ public class ChatServer {
 //            } catch (InterruptedException e) {
 //                e.printStackTrace();
 //            }
-            ExecutorService pool1 = Executors.newCachedThreadPool();
-            for (UserThread user : userThreads) {
-                user.setTask(Task.START);
-                pool1.execute(user);
-            }
-//                if (getWhoSentStarts()==getNumberOfPlayer()){
-            pool1.shutdown();
-            try {
-                pool1.awaitTermination(1, TimeUnit.DAYS);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (whoSentStarts==numberOfPlayer){
-            ExecutorService pool2 = Executors.newCachedThreadPool();
-            for (UserThread user : userThreads) {
-                user.setTask(Task.FIRST_NIGHT);
-                pool2.execute(user);
-            }
-            pool2.shutdown();
-            try {
-                pool2.awaitTermination(1, TimeUnit.DAYS);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }}
             while (!endOfGame()) {
-                ExecutorService pool3 = Executors.newCachedThreadPool();
+                ExecutorService pool1 = Executors.newCachedThreadPool();
                 for (UserThread user : userThreads) {
-                    user.setTask(Task.DAY);
-                    pool3.execute(user);
+                    user.setTask(Task.START);
+                    pool1.execute(user);
                 }
-                pool3.shutdown();
+//                if (getWhoSentStarts()==getNumberOfPlayer()){
+                pool1.shutdown();
                 try {
-                    pool3.awaitTermination(5, TimeUnit.MINUTES);
+                    pool1.awaitTermination(1, TimeUnit.DAYS);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                for (UserThread user : userThreads) {
-                    if (user.getRoll().isBeQuietduringTheDay() == true) {
-                        user.getRoll().setBeQuietduringTheDay(false);
+                if (whoSentStarts == numberOfPlayer) {
+                    ExecutorService pool2 = Executors.newCachedThreadPool();
+                    for (UserThread user : userThreads) {
+                        user.setTask(Task.FIRST_NIGHT);
+                        pool2.execute(user);
+                    }
+                    pool2.shutdown();
+                    try {
+                        pool2.awaitTermination(1, TimeUnit.DAYS);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
-                votesMap = newListForVoting();
-                ExecutorService pool4 = Executors.newCachedThreadPool();
-                for (UserThread user : userThreads) {
-                    user.setTask(Task.VOTING);
-                    pool4.execute(user);
-                }
-                pool4.shutdown();
-                try {
-                    pool4.awaitTermination(60, TimeUnit.SECONDS);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if (cancelVoting==true){
-                Map.Entry<String, Integer> maxEntry = null;
-
-                for (Map.Entry<String, Integer> entry : votesMap.entrySet()) {
-                    if (maxEntry == null || entry.getValue() > (maxEntry.getValue())) {
-                        maxEntry = entry;
+                while (!endOfGame()) {
+                    ExecutorService pool3 = Executors.newCachedThreadPool();
+                    for (UserThread user : userThreads) {
+                        user.setTask(Task.DAY);
+                        pool3.execute(user);
                     }
-                }
-                UserThread user = findUserByName(maxEntry.getKey());
-                removeUser(maxEntry.getKey(), user);}
-                for (UserThread userThread :userThreads){
-                    userThread.getRoll().setBeQuietduringTheDay(false);
-                }
-
-                ExecutorService pool5 = Executors.newCachedThreadPool();
-                for (UserThread user1 : userThreads) {
-                    user1.setTask(Task.NIGHT);
-                    pool5.execute(user1);
-                }
-                pool4.shutdown();
-                try {
-                    pool5.awaitTermination(1, TimeUnit.DAYS);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if (!whoGodKilled.equals(doctorSave)) {
-                    if (whoGodKilled.getRoll() instanceof DieHard) {
-                        if (((DieHard) whoGodKilled.getRoll()).getNumberOfLivesLeft() > 0) {
-                            ((DieHard) whoGodKilled.getRoll()).decreaseNumberOfivesLeft();
-                        } else {
-                             addLastNightDead(whoGodKilled);
-                       whoGodKilled.getRoll().setAlive(false);
+                    pool3.shutdown();
+                    try {
+                        pool3.awaitTermination(5, TimeUnit.MINUTES);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    for (UserThread user : userThreads) {
+                        if (user.getRoll().isBeQuietduringTheDay() == true) {
+                            user.getRoll().setBeQuietduringTheDay(false);
                         }
                     }
-                    else {
-                        addLastNightDead(whoGodKilled);
-                        whoGodKilled.getRoll().setAlive(false);
+                    votesMap = newListForVoting();
+                    ExecutorService pool4 = Executors.newCachedThreadPool();
+                    for (UserThread user : userThreads) {
+                        user.setTask(Task.VOTING);
+                        pool4.execute(user);
+                    }
+                    pool4.shutdown();
+                    try {
+                        pool4.awaitTermination(60, TimeUnit.SECONDS);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (cancelVoting == true) {
+                        Map.Entry<String, Integer> maxEntry = null;
+
+                        for (Map.Entry<String, Integer> entry : votesMap.entrySet()) {
+                            if (maxEntry == null || entry.getValue() > (maxEntry.getValue())) {
+                                maxEntry = entry;
+                            }
+                        }
+                        UserThread user = findUserByName(maxEntry.getKey());
+                        removeUser(maxEntry.getKey(), user);
+                    }
+                    for (UserThread userThread : userThreads) {
+                        userThread.getRoll().setBeQuietduringTheDay(false);
                     }
 
+                    ExecutorService pool5 = Executors.newCachedThreadPool();
+                    for (UserThread user1 : userThreads) {
+                        user1.setTask(Task.NIGHT);
+                        pool5.execute(user1);
+                    }
+                    pool4.shutdown();
+                    try {
+                        pool5.awaitTermination(1, TimeUnit.DAYS);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (!whoGodKilled.equals(doctorSave)) {
+                        if (whoGodKilled.getRoll() instanceof DieHard) {
+                            if (((DieHard) whoGodKilled.getRoll()).getNumberOfLivesLeft() > 0) {
+                                ((DieHard) whoGodKilled.getRoll()).decreaseNumberOfivesLeft();
+                            } else {
+                                addLastNightDead(whoGodKilled);
+                                whoGodKilled.getRoll().setAlive(false);
+                            }
+                        } else {
+                            addLastNightDead(whoGodKilled);
+                            whoGodKilled.getRoll().setAlive(false);
+                        }
+
+                    }
+                    if (!whoProfKilled.equals(drlecteSave)) {
+                        addLastNightDead(whoProfKilled);
+                        whoProfKilled.getRoll().setAlive(false);
+                    }
+
+
                 }
-                if (!whoProfKilled.equals(drlecteSave)) {
-                    addLastNightDead(whoProfKilled);
-                    whoProfKilled.getRoll().setAlive(false);
-                }
-
-
-
-
-
             }
-
         } catch (IOException ex) {
             System.out.println("Error in the server: " + ex.getMessage());
             ex.printStackTrace();
         }
+        announceEndOGame();
     }
 
     void broadcast(String message, UserThread excludeUser) {
@@ -300,6 +300,9 @@ public class ChatServer {
         if (numberOfMafia() >= (userThreads.size() - numberOfMafia())) {
             return true;
         }
+        if (numberOfMafia()==0){
+            return true;
+        }
         return false;
 
     }
@@ -355,7 +358,15 @@ public class ChatServer {
         }
     }
 
+public void announceEndOGame(){
+    if (numberOfMafia() >= (userThreads.size() - numberOfMafia())) {
+        broadcast("Mafia won the game.\n",null);
+    }
+    if (numberOfMafia()==0){
+        broadcast("the City won the game.\n",null);
 
+    }
+}
 
     public HashMap newListForVoting() {
         votesMap = new HashMap<>();

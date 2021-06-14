@@ -102,21 +102,26 @@ public class UserThread extends Thread {
         String clientMessage;
         // server.sendToSpecial(userName, serverMessage);
         sendMessage(serverMessage);
-        if (this.getRoll() instanceof Mafia) {
-            long start_time = System.currentTimeMillis();
-            long wait_time = 1000 * 60;
-            long end_time = start_time + wait_time;
-            serverMessage = "\nMafias have one minute to consult.\n";
-            //   server.sendToSpecial(userName, serverMessage);
-            sendMessage(serverMessage);
-            while (System.currentTimeMillis() < end_time) {
-                if (task == Task.NIGHT) {
-                    clientMessage = readFromClient(reader);
-                    serverMessage = "[" + userName + "]: " + clientMessage;
-                }
-                server.broadcastToMafias(serverMessage, this);
-            }
-        }
+//        if (this.getRoll() instanceof Mafia) {
+//            long start_time = System.currentTimeMillis();
+//            long wait_time = 1000 * 60;
+//            long end_time = start_time + wait_time;
+//            serverMessage = "\nMafias have one minute to consult.\n";
+//            //   server.sendToSpecial(userName, serverMessage);
+//            sendMessage(serverMessage);
+//            while (System.currentTimeMillis() < end_time) {
+//                if (task == Task.NIGHT) {
+//                    clientMessage = readFromClient(reader);
+//                    serverMessage = "[" + userName + "]: " + clientMessage;
+//                }
+//                server.broadcastToMafias(serverMessage, this);
+//            }
+//        }
+//        try {
+//            sleep(60000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         server.setLastNightDead();
         server.setWhoGodKilled(null);
         if (this.getRoll() instanceof Godfather && this.getRoll().isAlive()) {
@@ -143,6 +148,10 @@ public class UserThread extends Thread {
             }
         }
         if (this.getRoll() instanceof DrLecter && this.getRoll().isAlive()) {
+            serverMessage="Who do you want him to kill?\n";
+            sendMessage(serverMessage);
+            clientMessage= readFromClient(reader);
+            server.broadcastToMafias(clientMessage,this);
             serverMessage = "\nDr.lecter save a mafia.\n";
             //  server.sendToSpecial(userName, serverMessage);
             sendMessage(serverMessage);
@@ -163,6 +172,13 @@ public class UserThread extends Thread {
                     server.setDrlecteSave(server.findUserByName(clientMessage));
                 }
             }
+        }
+
+        if (this.getRoll() instanceof SimpleMafia && this.getRoll().isAlive()){
+            serverMessage="Who do you want him to kill?\n";
+            sendMessage(serverMessage);
+            clientMessage= readFromClient(reader);
+            server.broadcastToMafias(clientMessage,this);
         }
 
 
