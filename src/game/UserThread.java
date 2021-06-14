@@ -211,8 +211,9 @@ public class UserThread extends Thread {
         if (this.getRoll() instanceof SimpleMafia && this.getRoll().isAlive()) {
             serverMessage = "Who do you want him to kill?\n";
             sendMessage(serverMessage);
+            if (task == Task.NIGHT) {
             clientMessage = readFromClient(reader);
-            server.broadcastToMafias(clientMessage, this);
+            server.broadcastToMafias(clientMessage, this);}
         }
 
 
@@ -226,6 +227,7 @@ public class UserThread extends Thread {
                     if (((Doctor) getRoll()).isSaveHimself() == true) {
                         serverMessage = "You have already saved yourself once. Choose someone else.\n";
                         sendMessage(serverMessage);
+
                         clientMessage = readFromClient(reader);
                         if (!getUserName().equalsIgnoreCase(clientMessage)) {
                             server.setDoctorSave(server.findUserByName(clientMessage));
@@ -358,6 +360,7 @@ public class UserThread extends Thread {
                 }
             }
         }
+
     }
 
     /**

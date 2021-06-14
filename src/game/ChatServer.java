@@ -148,7 +148,7 @@ public class ChatServer {
                 userThreads.add(newUser);
                 newUser.setTask(Task.REGISTER);
                 newUser.start();
-                currentNumberOfPlayers++;
+              ++currentNumberOfPlayers;
             }
 //            ExecutorService pool = Executors.newCachedThreadPool();
 //            for (UserThread user : userThreads) {
@@ -162,7 +162,6 @@ public class ChatServer {
 //            } catch (InterruptedException e) {
 //                e.printStackTrace();
 //            }
-            while (!endOfGame()) {
                 ExecutorService pool1 = Executors.newCachedThreadPool();
                 for (UserThread user : userThreads) {
                     user.setTask(Task.START);
@@ -237,7 +236,7 @@ public class ChatServer {
                         user1.setTask(Task.NIGHT);
                         pool5.execute(user1);
                     }
-                    pool4.shutdown();
+                    pool5.shutdown();
                     try {
                         pool5.awaitTermination(1, TimeUnit.DAYS);
                     } catch (InterruptedException e) {
@@ -261,10 +260,10 @@ public class ChatServer {
                         addLastNightDead(whoProfKilled);
                         whoProfKilled.getRoll().setAlive(false);
                     }
-
+                    System.out.println(endOfGame());
 
                 }
-            }
+
         } catch (IOException ex) {
             System.out.println("Error in the server: " + ex.getMessage());
             ex.printStackTrace();
