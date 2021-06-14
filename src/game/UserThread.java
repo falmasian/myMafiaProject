@@ -171,6 +171,9 @@ public class UserThread extends Thread {
 //                    server.addLastNightDead(userToKill);
 //                    userToKill.getRoll().setAlive(false);
                 server.setWhoGodKilled(userToKill);
+                serverMessage = "Done!\n";
+                // server.sendToSpecial(userName, serverMessage);
+                sendMessage(serverMessage);
                 //   }
 
             }
@@ -200,6 +203,9 @@ public class UserThread extends Thread {
                     server.setDrlecteSave(server.findUserByName(clientMessage));
                 }
             }
+            serverMessage = "Done!\n";
+            // server.sendToSpecial(userName, serverMessage);
+            sendMessage(serverMessage);
         }
 
         if (this.getRoll() instanceof SimpleMafia && this.getRoll().isAlive()) {
@@ -234,6 +240,9 @@ public class UserThread extends Thread {
 //                    server.findUserByName(clientMessage).getRoll().setAlive(true);
                 }
             }
+            serverMessage = "Done!\n";
+            // server.sendToSpecial(userName, serverMessage);
+            sendMessage(serverMessage);
         }
 
         if (this.getRoll() instanceof Detective && this.getRoll().isAlive()) {
@@ -277,7 +286,9 @@ public class UserThread extends Thread {
                     }
                 }
             }
-
+            serverMessage = "Done!\n";
+            // server.sendToSpecial(userName, serverMessage);
+            sendMessage(serverMessage);
         }
         if (this.getRoll() instanceof Psychologist && this.getRoll().isAlive()) {
             serverMessage = "Psychologist".toUpperCase() + " Do you want someone to be quiet during the day?\n 1)Yes 2)No\n";
@@ -462,7 +473,7 @@ public class UserThread extends Thread {
                 serverMessage = "[" + userName + "]: " + clientMessage;
             }
             // server.sendToSpecial(server.nameOfMayor(), serverMessage);
-            sendMessage(serverMessage);
+            server.sendToSpecial(server.nameOfMayor(),serverMessage);
         }
     }
 
