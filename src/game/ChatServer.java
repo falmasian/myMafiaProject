@@ -147,7 +147,7 @@ public class ChatServer {
                 }
                 pool4.shutdown();
                 try {
-                    pool4.awaitTermination(30, TimeUnit.SECONDS);
+                    pool4.awaitTermination(60, TimeUnit.SECONDS);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -327,14 +327,23 @@ public class ChatServer {
         rolls.add(new DieHard("DieHard"));
         remainPlayers--;
         rolls.add(new Doctor("Doctor"));
+        remainPlayers--;
         rolls.add(new Mayor("Mayor"));
         remainPlayers--;
+        if (remainPlayers>=3){
         int num = remainPlayers / 3;
         for (int i = 0; i < num; i++) {
             rolls.add(new SimpleMafia("Simple Mafia"));
             remainPlayers--;
         }
         for (int i = remainPlayers; i >= 0; i--) {
+            rolls.add(new SimpleCitizen("Simple Citizen"));
+        }}
+      else   if (remainPlayers==2){
+            rolls.add(new SimpleCitizen("Simple Citizen"));
+            rolls.add(new SimpleMafia("Simple Mafia"));
+        }
+      else if (remainPlayers==1){
             rolls.add(new SimpleCitizen("Simple Citizen"));
         }
         Collections.shuffle(rolls);
@@ -430,6 +439,7 @@ public class ChatServer {
             //exception handling left as an exercise for the reader
         }
     }
+
 
 
     public static void main(String[] args) {

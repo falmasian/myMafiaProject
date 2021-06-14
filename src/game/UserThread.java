@@ -45,13 +45,13 @@ public class UserThread extends Thread {
             //do{
             if (task == Task.REGISTER) {
                 printUsers();
-                serverMessage="Enter your user name:";
+                serverMessage = "Enter your user name:";
                 sendMessage(serverMessage);
 
-                 userName = reader.readLine();
+                userName = reader.readLine();
                 while (true) {
                     if (server.getUserNames().contains(userName)) {
-                        serverMessage="The name you selected is a duplicate. Enter another name ";
+                        serverMessage = "The name you selected is a duplicate. Enter another name ";
                         sendMessage(serverMessage);
                         userName = reader.readLine();
                     } else break;
@@ -59,7 +59,7 @@ public class UserThread extends Thread {
                 server.addUserName(userName);
                 serverMessage = "New user connected: " + userName;
                 server.broadcast(serverMessage, this);
-                serverMessage="your roll is :" + roll.getRollName();
+                serverMessage = "your roll is :" + roll.getRollName();
                 //server.sendToSpecial(userName,serverMessage);
                 sendMessage(serverMessage);
             } else if (task == Task.START) {
@@ -100,14 +100,14 @@ public class UserThread extends Thread {
     private void night(BufferedReader reader) throws IOException {
         String serverMessage = "\"NIGHT \"";
         String clientMessage;
-       // server.sendToSpecial(userName, serverMessage);
+        // server.sendToSpecial(userName, serverMessage);
         sendMessage(serverMessage);
         if (this.getRoll() instanceof Mafia) {
             long start_time = System.currentTimeMillis();
             long wait_time = 1000 * 60;
             long end_time = start_time + wait_time;
             serverMessage = "\nMafias have one minute to consult.\n";
-         //   server.sendToSpecial(userName, serverMessage);
+            //   server.sendToSpecial(userName, serverMessage);
             sendMessage(serverMessage);
             while (System.currentTimeMillis() < end_time) {
                 if (task == Task.NIGHT) {
@@ -121,7 +121,7 @@ public class UserThread extends Thread {
         server.setWhoGodKilled(null);
         if (this.getRoll() instanceof Godfather && this.getRoll().isAlive()) {
             serverMessage = "Who do you want to kill?\n";
-           // server.sendToSpecial(userName, serverMessage);
+            // server.sendToSpecial(userName, serverMessage);
             sendMessage(serverMessage);
             if (task == Task.NIGHT) {
                 clientMessage = readFromClient(reader);
@@ -132,19 +132,19 @@ public class UserThread extends Thread {
 //                    } else {
 //                        server.addLastNightDead(userToKill);
 //                        userToKill.getRoll().setAlive(false);
-                  //      server.setWhoGodKilled(userToKill);
+                //      server.setWhoGodKilled(userToKill);
 //                    }
 //                } else {
 //                    server.addLastNightDead(userToKill);
 //                    userToKill.getRoll().setAlive(false);
-                    server.setWhoGodKilled(userToKill);
-             //   }
+                server.setWhoGodKilled(userToKill);
+                //   }
 
             }
         }
         if (this.getRoll() instanceof DrLecter && this.getRoll().isAlive()) {
             serverMessage = "\nDr.lecter save a mafia.\n";
-          //  server.sendToSpecial(userName, serverMessage);
+            //  server.sendToSpecial(userName, serverMessage);
             sendMessage(serverMessage);
             if (task == Task.NIGHT) {
                 clientMessage = readFromClient(reader);
@@ -168,7 +168,7 @@ public class UserThread extends Thread {
 
         if (this.getRoll() instanceof Doctor && this.getRoll().isAlive()) {
             serverMessage = "\nDoctor save a citizen.\n";
-           // server.sendToSpecial(userName, serverMessage);
+            // server.sendToSpecial(userName, serverMessage);
             sendMessage(serverMessage);
             if (task == Task.NIGHT) {
                 clientMessage = readFromClient(reader);
@@ -194,7 +194,7 @@ public class UserThread extends Thread {
 
         if (this.getRoll() instanceof Detective && this.getRoll().isAlive()) {
             serverMessage = "Detective".toUpperCase() + " Who do you want to inquire about, Detective?\n";
-           // server.sendToSpecial(userName, serverMessage);
+            // server.sendToSpecial(userName, serverMessage);
             sendMessage(serverMessage);
             if (task == Task.NIGHT) {
                 clientMessage = readFromClient(reader);
@@ -206,7 +206,7 @@ public class UserThread extends Thread {
                 } else if (userToInquire.getRoll() instanceof Mafia && !(userToInquire.getRoll() instanceof Godfather)) {
                     serverMessage = "This player is a MAFIA";
                 }
-               // server.sendToSpecial(userName, serverMessage);
+                // server.sendToSpecial(userName, serverMessage);
                 sendMessage(serverMessage);
             }
         }
@@ -217,17 +217,17 @@ public class UserThread extends Thread {
                 clientMessage = readFromClient(reader);
                 if ("yes".equalsIgnoreCase(clientMessage) || "1".equalsIgnoreCase(clientMessage)) {
                     serverMessage = "Who do you want to kill?\n";
-                   // server.sendToSpecial(userName, serverMessage);
+                    // server.sendToSpecial(userName, serverMessage);
                     sendMessage(serverMessage);
                     clientMessage = readFromClient(reader);
                     UserThread userToKill = server.findUserByName(clientMessage);
                     //&& !userToKill.equals(server.getDrlecteSave())
-                    if (userToKill.getRoll() instanceof Mafia ) {
+                    if (userToKill.getRoll() instanceof Mafia) {
 //                        userToKill.getRoll().setAlive(false);
 //                        server.addLastNightDead(userToKill);
                         server.setWhoProfKilled(userToKill);
                     } else if (userToKill.getRoll() instanceof Citizen) {
-                      //  this.getRoll().setAlive(false);
+                        //  this.getRoll().setAlive(false);
                         server.setWhoProfKilled(this);
 
                     }
@@ -242,13 +242,13 @@ public class UserThread extends Thread {
                 clientMessage = readFromClient(reader);
                 if ("yes".equalsIgnoreCase(clientMessage) || "1".equalsIgnoreCase(clientMessage)) {
                     serverMessage = "Who do you want to keep quiet during the day? \n";
-                   // server.sendToSpecial(userName, serverMessage);
+                    // server.sendToSpecial(userName, serverMessage);
                     sendMessage(serverMessage);
                     clientMessage = readFromClient(reader);
                     UserThread userToBeQuiet = server.findUserByName(clientMessage);
                     userToBeQuiet.getRoll().setBeQuietduringTheDay(true);
                     serverMessage = "Done!\n";
-                   // server.sendToSpecial(userName, serverMessage);
+                    // server.sendToSpecial(userName, serverMessage);
                     sendMessage(serverMessage);
                 }
             }
@@ -257,12 +257,12 @@ public class UserThread extends Thread {
         if (this.getRoll() instanceof DieHard && this.getRoll().isAlive()) {
             if (((DieHard) roll).getNumberOfQueriesLeft() <= 0) {
                 serverMessage = "DIE HARD You have used all your opportunities.\n";
-              //  server.sendToSpecial(userName, serverMessage);
+                //  server.sendToSpecial(userName, serverMessage);
                 sendMessage(serverMessage);
             } else if (((DieHard) roll).getNumberOfQueriesLeft() > 0) {
 
                 serverMessage = "DIE HARD Do you want the narrator to announce the deleted roles tomorrow? \n1)yes\n2)No\n";
-              //  server.sendToSpecial(userName, serverMessage);
+                //  server.sendToSpecial(userName, serverMessage);
                 sendMessage(serverMessage);
                 if (task == Task.NIGHT) {
                     clientMessage = readFromClient(reader);
@@ -272,7 +272,7 @@ public class UserThread extends Thread {
                         ((DieHard) roll).decreaseNumberOfQueriesLeft();
                     }
                     serverMessage = "Done!\n";
-                   // server.sendToSpecial(userName, serverMessage);
+                    // server.sendToSpecial(userName, serverMessage);
                     sendMessage(serverMessage);
                 }
             }
@@ -281,11 +281,10 @@ public class UserThread extends Thread {
     }
 
 
-
     private void voting(BufferedReader reader) throws IOException {
         String clientMessage;
         String serverMessage = " \" VOTING \" \n Enter a player's name : ";
-       // server.sendToSpecial(this.getName(), serverMessage);
+        // server.sendToSpecial(this.getName(), serverMessage);
         sendMessage(serverMessage);
         if (task == Task.VOTING) {
             clientMessage = readFromClient(reader);
@@ -303,6 +302,7 @@ public class UserThread extends Thread {
             }
         }
     }
+
     private void day(BufferedReader reader) throws IOException {
         List<UserThread> deads = server.getLastNightDead();
         String clientMessage;
@@ -313,53 +313,65 @@ public class UserThread extends Thread {
                 serverMessage += user.getName() + " ";
 
                 serverMessage = "[" + userName + "]: " + serverMessage;
-             //   server.sendToSpecial(this.getName(), serverMessage);
+                //   server.sendToSpecial(this.getName(), serverMessage);
                 sendMessage(serverMessage);
             }
         }
-        for (UserThread user:deads){
-            if (user.equals(this)){
-                serverMessage="You are dead.\n1) Do you want to leave the game?\n Or\n 2) Stay in the game as a spectator?\n";
+        for (UserThread user : deads) {
+            if (user.equals(this)) {
+                serverMessage = "You are dead.\n1) Do you want to leave the game?\n Or\n 2) Stay in the game as a spectator?\n";
                 sendMessage(serverMessage);
                 clientMessage = readFromClient(reader);
-                if ("1".equalsIgnoreCase(clientMessage)){
-                    serverMessage="Bye!\n";
+                if ("1".equalsIgnoreCase(clientMessage)) {
+                    serverMessage = "Bye!\n";
                     sendMessage(serverMessage);
                     userQiutting();
                 }
             }
         }
-        if (server.isAnnounceDeletedRolls()){
-            serverMessage="Die hard inquired last night\n";
+        if (server.isAnnounceDeletedRolls()) {
+            serverMessage = "Die hard inquired last night\n";
             sendMessage(serverMessage);
             Collections.shuffle(server.getWholeDead());
-            for (UserThread user: server.getWholeDead()){
-                serverMessage=user.getRoll().getRollName()+"\n";
+            for (UserThread user : server.getWholeDead()) {
+                serverMessage = user.getRoll().getRollName() + "\n";
                 sendMessage(serverMessage);
             }
         }
         serverMessage += "\nMORNING\n";
-       // server.sendToSpecial(this.getName(), serverMessage);
+        // server.sendToSpecial(this.getName(), serverMessage);
         sendMessage(serverMessage);
         long start_time = System.currentTimeMillis();
         long wait_time = 1000 * 60 * 5;
         long end_time = start_time + wait_time;
         server.setReadyToVote(0);
 
-        while ((System.currentTimeMillis() < end_time || server.getReadyToVote() == server.numberOfAlives())&& task==Task.DAY) {
-            if (this.getRoll().isAlive() ){
-                clientMessage = readFromClient(reader);
-            if ("ready".equalsIgnoreCase(clientMessage)) {
-                server.setReadyToVote(server.getReadyToVote() + 1);
+        while (System.currentTimeMillis() < end_time) {
+            if (!task.equals(Task.DAY)) {
+                break;
             }
-            if (this.getRoll().isBeQuietduringTheDay()==true && !"ready".equalsIgnoreCase(clientMessage)) {}
-            else {
-            serverMessage = "[" + userName + "]: " + clientMessage;
-            server.writeToFile(serverMessage);
-            server.broadcast(serverMessage, this);}}}
 
 
+            //  if (server.getReadyToVote()==server.numberOfAlives()){break;}
+
+            if (this.getRoll().isAlive() && this.getRoll().isBeQuietduringTheDay() == false ) {
+                clientMessage = readFromClient(reader);
+//            if ("ready".equalsIgnoreCase(clientMessage)) {
+//                server.setReadyToVote(server.getReadyToVote() + 1);
+//            }
+                if ("ready".equalsIgnoreCase(clientMessage)){
+                    break;
+                }
+                    serverMessage = "[" + userName + "]: " + clientMessage;
+                    server.writeToFile(serverMessage);
+                    server.broadcast(serverMessage, this);
+
+            }
+        }
     }
+
+
+
 
     private void startGame(BufferedReader reader) {
         String serverMessage = "Time to start game!\n" + "Enter start if you are ready:\n";
@@ -377,18 +389,19 @@ public class UserThread extends Thread {
         String serverMessage = "Introduction".toUpperCase(Locale.ROOT) + "NIGHT\n" + "Mafias introduce your rolls:\n";
         String clientMessage;
       //  server.sendToSpecial(userName, serverMessage);
-        sendMessage(serverMessage);
+
         if (this.getRoll() instanceof Mafia) {
             if (task==Task.FIRST_NIGHT){
+        sendMessage(serverMessage);
                 clientMessage = readFromClient(reader);
             serverMessage = "[" + userName + "]: " + clientMessage;}
             server.broadcastToMafias(serverMessage, this);
         }
         serverMessage = "doctor introduce yourself to the mayor:\n";
        // server.sendToSpecial(userName, serverMessage);
-        sendMessage(serverMessage);
         if (this.getRoll() instanceof Doctor) {
             if (task==Task.FIRST_NIGHT){
+        sendMessage(serverMessage);
                 clientMessage = readFromClient(reader);
             serverMessage = "[" + userName + "]: " + clientMessage;}
             // server.sendToSpecial(server.nameOfMayor(), serverMessage);
