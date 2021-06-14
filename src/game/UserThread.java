@@ -4,6 +4,9 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+/**
+ * The type User thread.
+ */
 public class UserThread extends Thread {
     private String userName;
     private Socket socket;
@@ -12,6 +15,13 @@ public class UserThread extends Thread {
     private Roll roll;
     private Task task;
 
+    /**
+     * Instantiates a new User thread.
+     *
+     * @param socket the socket
+     * @param server the server
+     * @param roll   the roll
+     */
     public UserThread(Socket socket, ChatServer server, Roll roll) {
         this.socket = socket;
         this.server = server;
@@ -19,14 +29,29 @@ public class UserThread extends Thread {
 
     }
 
+    /**
+     * Gets user name.
+     *
+     * @return the user name
+     */
     public String getUserName() {
         return userName;
     }
 
+    /**
+     * Sets task.
+     *
+     * @param task the task
+     */
     public void setTask(Task task) {
         this.task = task;
     }
 
+    /**
+     * Gets roll.
+     *
+     * @return the roll
+     */
     public Roll getRoll() {
         return roll;
     }
@@ -97,6 +122,9 @@ public class UserThread extends Thread {
         //    ex.printStackTrace();
     }
 
+    /**
+     * handle night part of game
+     */
     private void night(BufferedReader reader) throws IOException {
         String serverMessage = "\"NIGHT \"";
         String clientMessage;
@@ -148,10 +176,10 @@ public class UserThread extends Thread {
             }
         }
         if (this.getRoll() instanceof DrLecter && this.getRoll().isAlive()) {
-            serverMessage="Who do you want him to kill?\n";
+            serverMessage = "Who do you want him to kill?\n";
             sendMessage(serverMessage);
-            clientMessage= readFromClient(reader);
-            server.broadcastToMafias(clientMessage,this);
+            clientMessage = readFromClient(reader);
+            server.broadcastToMafias(clientMessage, this);
             serverMessage = "\nDr.lecter save a mafia.\n";
             //  server.sendToSpecial(userName, serverMessage);
             sendMessage(serverMessage);
@@ -174,11 +202,11 @@ public class UserThread extends Thread {
             }
         }
 
-        if (this.getRoll() instanceof SimpleMafia && this.getRoll().isAlive()){
-            serverMessage="Who do you want him to kill?\n";
+        if (this.getRoll() instanceof SimpleMafia && this.getRoll().isAlive()) {
+            serverMessage = "Who do you want him to kill?\n";
             sendMessage(serverMessage);
-            clientMessage= readFromClient(reader);
-            server.broadcastToMafias(clientMessage,this);
+            clientMessage = readFromClient(reader);
+            server.broadcastToMafias(clientMessage, this);
         }
 
 
@@ -296,7 +324,9 @@ public class UserThread extends Thread {
 
     }
 
-
+    /**
+     * handle voting part of game
+     */
     private void voting(BufferedReader reader) throws IOException {
         String clientMessage;
         String serverMessage = " \" VOTING \" \n Enter a player's name : ";
@@ -319,6 +349,9 @@ public class UserThread extends Thread {
         }
     }
 
+    /**
+     * handle day part of game
+     */
     private void day(BufferedReader reader) throws IOException {
         List<UserThread> deads = server.getLastNightDead();
         String clientMessage;
@@ -370,56 +403,64 @@ public class UserThread extends Thread {
 
             //  if (server.getReadyToVote()==server.numberOfAlives()){break;}
 
-            if (this.getRoll().isAlive() && this.getRoll().isBeQuietduringTheDay() == false ) {
+            if (this.getRoll().isAlive() && this.getRoll().isBeQuietDuringTheDay() == false) {
                 clientMessage = readFromClient(reader);
 //            if ("ready".equalsIgnoreCase(clientMessage)) {
 //                server.setReadyToVote(server.getReadyToVote() + 1);
 //            }
-                if ("ready".equalsIgnoreCase(clientMessage)){
+                if ("ready".equalsIgnoreCase(clientMessage)) {
                     break;
                 }
-                    serverMessage = "[" + userName + "]: " + clientMessage;
-                    server.writeToFile(serverMessage);
-                    server.broadcast(serverMessage, this);
+                serverMessage = "[" + userName + "]: " + clientMessage;
+                server.writeToFile(serverMessage);
+                server.broadcast(serverMessage, this);
 
             }
         }
     }
 
-
+    /**
+     * handle starting part of game
+     */
 
 
     private void startGame(BufferedReader reader) {
         String serverMessage = "Time to start game!\n" + "Enter start if you are ready:\n";
         String clientMessage;
-       // server.sendToSpecial(userName, serverMessage);
+        // server.sendToSpecial(userName, serverMessage);
         sendMessage(serverMessage);
-        if (task==Task.START){
+        if (task == Task.START) {
             clientMessage = readFromClient(reader);
-        if ("start".equalsIgnoreCase(clientMessage)) {
-            server.setWhoSentStarts(server.getWhoSentStarts() + 1);}
+            if ("start".equalsIgnoreCase(clientMessage)) {
+                server.setWhoSentStarts(server.getWhoSentStarts() + 1);
+            }
         }
     }
 
+    /**
+     * handle introduce night part of game
+     */
     private void introduceNight(BufferedReader reader) {
         String serverMessage = "Introduction".toUpperCase(Locale.ROOT) + "NIGHT\n" + "Mafias introduce your rolls:\n";
         String clientMessage;
-      //  server.sendToSpecial(userName, serverMessage);
+        //  server.sendToSpecial(userName, serverMessage);
 
         if (this.getRoll() instanceof Mafia) {
-            if (task==Task.FIRST_NIGHT){
-        sendMessage(serverMessage);
+            if (task == Task.FIRST_NIGHT) {
+                sendMessage(serverMessage);
                 clientMessage = readFromClient(reader);
-            serverMessage = "[" + userName + "]: " + clientMessage;}
+                serverMessage = "[" + userName + "]: " + clientMessage;
+            }
             server.broadcastToMafias(serverMessage, this);
         }
         serverMessage = "doctor introduce yourself to the mayor:\n";
-       // server.sendToSpecial(userName, serverMessage);
+        // server.sendToSpecial(userName, serverMessage);
         if (this.getRoll() instanceof Doctor) {
-            if (task==Task.FIRST_NIGHT){
-        sendMessage(serverMessage);
+            if (task == Task.FIRST_NIGHT) {
+                sendMessage(serverMessage);
                 clientMessage = readFromClient(reader);
-            serverMessage = "[" + userName + "]: " + clientMessage;}
+                serverMessage = "[" + userName + "]: " + clientMessage;
+            }
             // server.sendToSpecial(server.nameOfMayor(), serverMessage);
             sendMessage(serverMessage);
         }
@@ -438,11 +479,17 @@ public class UserThread extends Thread {
 
     /**
      * Sends a message to the client.
+     *
+     * @param message the message
      */
     void sendMessage(String message) {
         writer.println(message);
     }
-    public void userQiutting(){
+
+    /**
+     * User qiutting.
+     */
+    public void userQiutting() {
         String serverMessage;
         server.removeUser(userName, this);
         try {
@@ -452,47 +499,55 @@ public class UserThread extends Thread {
         }
 
         serverMessage = userName + " has quitted.";
-      server.broadcast(serverMessage, this);}
+        server.broadcast(serverMessage, this);
+    }
 
 
-      public void readDailyChatFile(){
-          try {
-              File myObj = new File("dailyChatFile.txt");
-              Scanner myReader = new Scanner(myObj);
-              while (myReader.hasNextLine()) {
-                  String data = myReader.nextLine();
-                  sendMessage(data);
-              }
-              myReader.close();
-          } catch (FileNotFoundException e) {
-              System.out.println("An error occurred.");
-              e.printStackTrace();
-          }
-      }
+    /**
+     * Read daily chat file.
+     */
+    public void readDailyChatFile() {
+        try {
+            File myObj = new File("dailyChatFile.txt");
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                sendMessage(data);
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
 
-      public String readFromClient(BufferedReader reader) {
-          String clientmessage = null;
-          try {
-              clientmessage = reader.readLine();
-          } catch (IOException e) {
-              e.printStackTrace();
-          }
-          if ("history".equalsIgnoreCase(clientmessage)){
-                  readDailyChatFile();
-              String clientmessage1= null;
-              try {
-                  clientmessage1 = reader.readLine();
-              } catch (IOException e) {
-                  e.printStackTrace();
-              }
-              return clientmessage1;
-              }
-              else if ("exit".equalsIgnoreCase(clientmessage)){
-                  userQiutting();
-                  return null;
-              }
-              else {
-                  return clientmessage;
-              }
-      }
+    /**
+     * Read from client string.
+     *
+     * @param reader the reader
+     * @return the string
+     */
+    public String readFromClient(BufferedReader reader) {
+        String clientmessage = null;
+        try {
+            clientmessage = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if ("history".equalsIgnoreCase(clientmessage)) {
+            readDailyChatFile();
+            String clientmessage1 = null;
+            try {
+                clientmessage1 = reader.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return clientmessage1;
+        } else if ("exit".equalsIgnoreCase(clientmessage)) {
+            userQiutting();
+            return null;
+        } else {
+            return clientmessage;
+        }
+    }
 }

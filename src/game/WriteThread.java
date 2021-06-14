@@ -17,6 +17,12 @@ public class WriteThread extends Thread {
     private Socket socket;
     private ChatClient client;
 
+    /**
+     * Instantiates a new Write thread.
+     *
+     * @param socket the socket
+     * @param client the client
+     */
     public WriteThread(Socket socket, ChatClient client) {
         this.socket = socket;
         this.client = client;
