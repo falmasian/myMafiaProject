@@ -67,7 +67,6 @@ public class UserThread extends Thread {
             String serverMessage = "";
 
 
-            //do{
             if (task == Task.REGISTER) {
                 printUsers();
                 serverMessage = "Enter your user name:";
@@ -494,15 +493,11 @@ public class UserThread extends Thread {
     private void day(BufferedReader reader) throws IOException {
         List<UserThread> deads = server.getLastNightDead();
         String clientMessage;
-        String serverMessage = "players who dead last night:";
+        String serverMessage = "players who dead last night:\n";
         sendMessage(serverMessage);
         if (deads != null) {
             for (UserThread user : deads) {
-                serverMessage += user.getUserName() + " ";
-
-                serverMessage = "[" + userName + "]: " + serverMessage;
-                //   server.sendToSpecial(this.getName(), serverMessage);
-                sendMessage(serverMessage);
+               sendMessage(user.getUserName()+"\n");
             }
         }
         for (UserThread user : deads) {
@@ -521,7 +516,7 @@ public class UserThread extends Thread {
             }
         }
         if (server.isAnnounceDeletedRolls()) {
-            serverMessage = "Die hard inquired last night\n";
+            serverMessage = "\nDie hard inquired last night\n";
             sendMessage(serverMessage);
             Collections.shuffle(server.getWholeDead());
             for (UserThread user : server.getWholeDead()) {
@@ -529,7 +524,7 @@ public class UserThread extends Thread {
                 sendMessage(serverMessage);
             }
         }
-        serverMessage += "\nMORNING\n";
+        serverMessage += "\n\"MORNING\"\n";
         // server.sendToSpecial(this.getName(), serverMessage);
         sendMessage(serverMessage);
         long start_time = System.currentTimeMillis();
@@ -689,7 +684,7 @@ public class UserThread extends Thread {
         } catch (IOException e) {
          //   e.printStackTrace();
             this.getRoll().setAlive(false);
-            server.broadcast(userName+ "disconnected",this);
+            server.broadcast(userName+ " disconnected",this);
             return null;
         }
         if ("history".equalsIgnoreCase(clientmessage)) {

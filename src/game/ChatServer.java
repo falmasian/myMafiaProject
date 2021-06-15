@@ -169,6 +169,7 @@ public class ChatServer {
             }
             userWhoShouldDieInVoting = findUserByName(maxEntry.getKey());
             userWhoShouldDieInVoting.getRoll().setAlive(false);
+            addLastNightDead(userWhoShouldDieInVoting);
         }
         ExecutorService pool5 = Executors.newCachedThreadPool();
         for (UserThread user1 : userThreads) {
@@ -211,9 +212,8 @@ public class ChatServer {
                     addLastNightDead(whoGodKilled);
                     whoGodKilled.getRoll().setAlive(false);
                 }
-            } else {
-                addLastNightDead(whoGodKilled);
-                whoGodKilled.getRoll().setAlive(false);
+            } else if (whoGodKilled.equals(doctorSave)){
+                whoGodKilled.getRoll().setAlive(true);
             }
 
         }
