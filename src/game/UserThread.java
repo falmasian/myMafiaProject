@@ -96,7 +96,11 @@ public class UserThread extends Thread {
                 day(reader);
             } else if (task == Task.VOTING) {
                 voting(reader);
-            } else if (task == Task.NIGHT) {
+            }else if (task==Task.AFTER_VOTING){
+                afterVoting(reader);
+            }
+
+            else if (task == Task.NIGHT) {
                 night(reader);
             }
 
@@ -129,20 +133,7 @@ public class UserThread extends Thread {
         String clientMessage;
         String serverMessage;
 
-        if (server.getUserWhoShouldDieInVoting().equals(this)) {
-            serverMessage = "in the last voting You" +
-                    " dead.\n1) Do you want to leave the game?\n Or\n 2) Stay in the game as a spectator?\n";
-            sendMessage(serverMessage);
-            clientMessage = readFromClient(reader);
-            if (clientMessage == null) {
-                return;
-            }
-            if ("1".equalsIgnoreCase(clientMessage)) {
-                serverMessage = "Bye!\n";
-                sendMessage(serverMessage);
-                userQiutting();
-            }
-        }
+
 
 
         serverMessage = "\"NIGHT \"";
@@ -447,6 +438,22 @@ public void psychologistAction(BufferedReader reader){
         }
 
     }
+    public void afterVoting(BufferedReader reader){
+        String serverMessage,clientMessage;
+        if (server.getUserWhoShouldDieInVoting().equals(this)) {
+        serverMessage = "in the last voting You" +
+                " dead.\n1) Do you want to leave the game?\n Or\n 2) Stay in the game as a spectator?\n";
+        sendMessage(serverMessage);
+        clientMessage = readFromClient(reader);
+        if (clientMessage == null) {
+            return;
+        }
+        if ("1".equalsIgnoreCase(clientMessage)) {
+            serverMessage = "Bye!\n";
+            sendMessage(serverMessage);
+            userQiutting();
+        }
+    }}
 
     /**
      * handle day part of game

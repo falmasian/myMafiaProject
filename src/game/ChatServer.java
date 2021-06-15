@@ -67,6 +67,7 @@ public class ChatServer {
             while (!endOfGame()) {
                 day();
                 voting();
+                afterVote();
                 night();
             }
 
@@ -163,6 +164,24 @@ public class ChatServer {
             }
             userWhoShouldDieInVoting = findUserByName(maxEntry.getKey());
             userWhoShouldDieInVoting.getRoll().setAlive(false);
+        }
+    }
+
+    public void afterVote(){
+        for (UserThread userThread : userThreads) {
+            userThread.getRoll().setBeQuietduringTheDay(false);
+        }
+
+        ExecutorService pool5 = Executors.newCachedThreadPool();
+        for (UserThread user1 : userThreads) {
+            user1.setTask(Task.AFTER_VOTING);
+            pool5.execute(user1);
+        }
+        pool5.shutdown();
+        try {
+            pool5.awaitTermination(1, TimeUnit.DAYS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

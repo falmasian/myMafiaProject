@@ -28,4 +28,8 @@ public enum Task {
      * Register task.
      */
     REGISTER,
+    /**
+     * AfterVoting task.
+     */
+    AFTER_VOTING
 }
