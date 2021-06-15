@@ -154,6 +154,11 @@ public class ChatServer {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+    }
+
+    public void afterVote(){
+
         if (cancelVoting == false) {
             Map.Entry<String, Integer> maxEntry = null;
 
@@ -165,13 +170,6 @@ public class ChatServer {
             userWhoShouldDieInVoting = findUserByName(maxEntry.getKey());
             userWhoShouldDieInVoting.getRoll().setAlive(false);
         }
-    }
-
-    public void afterVote(){
-        for (UserThread userThread : userThreads) {
-            userThread.getRoll().setBeQuietduringTheDay(false);
-        }
-
         ExecutorService pool5 = Executors.newCachedThreadPool();
         for (UserThread user1 : userThreads) {
             user1.setTask(Task.AFTER_VOTING);
@@ -189,6 +187,7 @@ public class ChatServer {
      * Night.
      */
     public void night() {
+
         for (UserThread userThread : userThreads) {
             userThread.getRoll().setBeQuietduringTheDay(false);
         }

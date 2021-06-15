@@ -104,33 +104,17 @@ public class UserThread extends Thread {
                 night(reader);
             }
 
-
-//
-//                                clientMessage = reader.readLine();
-//                serverMessage = "[" + userName + "]: " + clientMessage;
-//                server.broadcast(serverMessage, this);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //while (!clientMessage.equals("exit")) ;
 
-//        server.removeUser(userName, this);
-//        socket.close();
-//
-//        serverMessage = userName + " has quitted.";
-//        server.broadcast(serverMessage, this);
-
-        // catch (IOException ex) {
-        //   System.out.println("Error in UserThread: " + ex.getMessage());
-        //    ex.printStackTrace();
     }
 
     /**
      * handle night part of game
      */
     private void night(BufferedReader reader) throws IOException {
-        String clientMessage;
+        String clientMessage="";
         String serverMessage;
 
 
@@ -190,7 +174,6 @@ public class UserThread extends Thread {
             serverMessage = "Done!\n";
             // server.sendToSpecial(userName, serverMessage);
             sendMessage(serverMessage);
-            //   }
 
         }
     }
@@ -322,6 +305,11 @@ public class UserThread extends Thread {
         }
     }
 
+    /**
+     * Die hard action.
+     *
+     * @param reader the reader
+     */
     public void dieHardAction(BufferedReader reader){
     String serverMessage="";
     String clientMessage="";
@@ -350,7 +338,12 @@ public class UserThread extends Thread {
     }
 }}
 
-public void psychologistAction(BufferedReader reader){
+    /**
+     * Psychologist action.
+     *
+     * @param reader the reader
+     */
+    public void psychologistAction(BufferedReader reader){
         String clientMessage;
         String serverMessage = "Psychologist".toUpperCase() + " Do you want someone to be quiet during the day?\n 1)Yes 2)No\n";
     sendMessage(serverMessage);
@@ -374,6 +367,12 @@ public void psychologistAction(BufferedReader reader){
             sendMessage(serverMessage);
         }
     }}
+
+    /**
+     * Professional action.
+     *
+     * @param reader the reader
+     */
     public void professionalAction(BufferedReader reader){
         String clientMessage;
         String serverMessage = "Professional".toUpperCase() + " Do you want to kill someone?\n 1)Yes 2)No\n";
@@ -438,8 +437,16 @@ public void psychologistAction(BufferedReader reader){
         }
 
     }
+
+    /**
+     * After voting.
+     *
+     * @param reader the reader
+     */
     public void afterVoting(BufferedReader reader){
         String serverMessage,clientMessage;
+        if (server.isCancelVoting()==false){
+            sendMessage("According to yesterday's vote "+server.getUserWhoShouldDieInVoting().getUserName()+"must leave game.\n");
         if (server.getUserWhoShouldDieInVoting().equals(this)) {
         serverMessage = "in the last voting You" +
                 " dead.\n1) Do you want to leave the game?\n Or\n 2) Stay in the game as a spectator?\n";
@@ -452,8 +459,13 @@ public void psychologistAction(BufferedReader reader){
             serverMessage = "Bye!\n";
             sendMessage(serverMessage);
             userQiutting();
+        }}
+    }
+        else if (server.isCancelVoting()==true){
+            sendMessage("mayor cancel result of voting\n");
         }
-    }}
+
+    }
 
     /**
      * handle day part of game
