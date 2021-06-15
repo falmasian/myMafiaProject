@@ -539,6 +539,11 @@ public class UserThread extends Thread {
 
 
             //  if (server.getReadyToVote()==server.numberOfAlives()){break;}
+            if (this.getRoll().isBeQuietDuringTheDay() ==true){
+                serverMessage="psychologist chose you to be quiet today";
+                sendMessage(serverMessage);
+            }
+
 
             if (this.getRoll().isAlive() && this.getRoll().isBeQuietDuringTheDay() == false) {
                 clientMessage = readFromClient(reader);
