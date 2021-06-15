@@ -30,97 +30,7 @@ public class ChatServer {
     private boolean cancelVoting = false;
     private  UserThread userWhoShouldDieInVoting;
 
-    /**
-     * Gets whole dead.
-     *
-     * @return the whole dead
-     */
-    public List<UserThread> getWholeDead() {
-        return wholeDead;
-    }
 
-    /**
-     * Add whole dead.
-     *
-     * @param userThread the user thread
-     */
-    public void addWholeDead(UserThread userThread) {
-        wholeDead.add(userThread);
-    }
-
-    /**
-     * Is cancel voting boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isCancelVoting() {
-        return cancelVoting;
-    }
-
-    /**
-     * Sets cancel voting.
-     *
-     * @param cancelVoting the cancel voting
-     */
-    public void setCancelVoting(boolean cancelVoting) {
-        this.cancelVoting = cancelVoting;
-    }
-
-    /**
-     * Gets who prof killed.
-     *
-     * @return the who prof killed
-     */
-    public UserThread getWhoProfKilled() {
-        return whoProfKilled;
-    }
-
-    /**
-     * Sets who prof killed.
-     *
-     * @param whoProfKilled the who prof killed
-     */
-    public void setWhoProfKilled(UserThread whoProfKilled) {
-        this.whoProfKilled = whoProfKilled;
-    }
-
-    private boolean announceDeletedRolls;
-
-    /**
-     * Gets who god killed.
-     *
-     * @return the who god killed
-     */
-    public UserThread getWhoGodKilled() {
-        return whoGodKilled;
-    }
-
-    /**
-     * Sets who god killed.
-     *
-     * @param whoGodKilled the who god killed
-     */
-    public void setWhoGodKilled(UserThread whoGodKilled) {
-        this.whoGodKilled = whoGodKilled;
-    }
-
-    /**
-     * Is announce deleted rolls boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isAnnounceDeletedRolls() {
-        return announceDeletedRolls;
-    }
-
-    /**
-     * Sets announce deleted rolls.
-     *
-     * @param announceDeletedRolls the announce deleted rolls
-     */
-    public void setAnnounceDeletedRolls(boolean announceDeletedRolls) {
-        this.announceDeletedRolls = announceDeletedRolls;
-    }
 
     /**
      * Instantiates a new Chat server.
@@ -512,9 +422,14 @@ public class ChatServer {
      * @param numberOfPlayer the number of player
      */
     public void setNumberOfPlayer(int numberOfPlayer) {
-        if (numberOfPlayer >= 7) {
+        System.out.println("number of player must be more than \"8\"\n");
+        if (numberOfPlayer >= 8) {
             this.numberOfPlayer = numberOfPlayer;
         }
+        else {
+            this.numberOfPlayer =10;
+        }
+
     }
 
     /**
@@ -714,7 +629,97 @@ public class ChatServer {
     public UserThread getUserWhoShouldDieInVoting() {
         return userWhoShouldDieInVoting;
     }
+    /**
+     * Gets whole dead.
+     *
+     * @return the whole dead
+     */
+    public List<UserThread> getWholeDead() {
+        return wholeDead;
+    }
 
+    /**
+     * Add whole dead.
+     *
+     * @param userThread the user thread
+     */
+    public void addWholeDead(UserThread userThread) {
+        wholeDead.add(userThread);
+    }
+
+    /**
+     * Is cancel voting boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isCancelVoting() {
+        return cancelVoting;
+    }
+
+    /**
+     * Sets cancel voting.
+     *
+     * @param cancelVoting the cancel voting
+     */
+    public void setCancelVoting(boolean cancelVoting) {
+        this.cancelVoting = cancelVoting;
+    }
+
+    /**
+     * Gets who prof killed.
+     *
+     * @return the who prof killed
+     */
+    public UserThread getWhoProfKilled() {
+        return whoProfKilled;
+    }
+
+    /**
+     * Sets who prof killed.
+     *
+     * @param whoProfKilled the who prof killed
+     */
+    public void setWhoProfKilled(UserThread whoProfKilled) {
+        this.whoProfKilled = whoProfKilled;
+    }
+
+    private boolean announceDeletedRolls;
+
+    /**
+     * Gets who god killed.
+     *
+     * @return the who god killed
+     */
+    public UserThread getWhoGodKilled() {
+        return whoGodKilled;
+    }
+
+    /**
+     * Sets who god killed.
+     *
+     * @param whoGodKilled the who god killed
+     */
+    public void setWhoGodKilled(UserThread whoGodKilled) {
+        this.whoGodKilled = whoGodKilled;
+    }
+
+    /**
+     * Is announce deleted rolls boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isAnnounceDeletedRolls() {
+        return announceDeletedRolls;
+    }
+
+    /**
+     * Sets announce deleted rolls.
+     *
+     * @param announceDeletedRolls the announce deleted rolls
+     */
+    public void setAnnounceDeletedRolls(boolean announceDeletedRolls) {
+        this.announceDeletedRolls = announceDeletedRolls;
+    }
     /**
      * The entry point of application.
      *
@@ -723,6 +728,7 @@ public class ChatServer {
     public static void main(String[] args) {
         int port = 5005;
         ChatServer chatServer = new ChatServer(port);
+        chatServer.setNumberOfPlayer(10);
         chatServer.execute();
 
 
