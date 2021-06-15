@@ -158,7 +158,11 @@ public class UserThread extends Thread {
         }
 
     }
-
+    /**
+     * god father action.
+     *
+     * @param reader the reader
+     */
     private void godFatherAction(BufferedReader reader) {
         String clientMessage;
         String serverMessage = "Who do you want to kill?\n";
@@ -177,7 +181,11 @@ public class UserThread extends Thread {
 
         }
     }
-
+    /**
+     * dr.Lecter action.
+     *
+     * @param reader the reader
+     */
     private void drLecterAction(BufferedReader reader) {
         String serverMessage,clientMessage;
         if (server.isGodFatherAlive()==false){
@@ -206,7 +214,8 @@ public class UserThread extends Thread {
             if (clientMessage == null) {
                 return;
             }
-            server.broadcastToMafias(clientMessage, this);}
+            serverMessage = "[" + userName + "]: " + clientMessage;
+            server.broadcastToMafias(serverMessage, this);}
         serverMessage = "\nDr.lecter save a mafia.\n";
         //  server.sendToSpecial(userName, serverMessage);
         sendMessage(serverMessage);
@@ -234,7 +243,11 @@ public class UserThread extends Thread {
         // server.sendToSpecial(userName, serverMessage);
         sendMessage(serverMessage);
     }
-
+    /**
+     * doctor action.
+     *
+     * @param reader the reader
+     */
     private void doctorAction(BufferedReader reader) {
       String  serverMessage = "\nDoctor save a citizen.\n";
       String clientMessage;
@@ -271,7 +284,11 @@ public class UserThread extends Thread {
         // server.sendToSpecial(userName, serverMessage);
         sendMessage(serverMessage);
     }
-
+    /**
+     * simpleMafia action.
+     *
+     * @param reader the reader
+     */
     private void simpleMafiaAction(BufferedReader reader) {
      String   serverMessage = "Who do you want Gad father to kill?\n";
         sendMessage(serverMessage);
@@ -281,7 +298,11 @@ public class UserThread extends Thread {
             server.broadcastToMafias(serverMessage, this);
         }
     }
-
+    /**
+     * detective action.
+     *
+     * @param reader the reader
+     */
     private void detectiveAction(BufferedReader reader) {
         String clientMessage;
        String serverMessage = "Detective".toUpperCase() + " Who do you want to inquire about, Detective?\n";
