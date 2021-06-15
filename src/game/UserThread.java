@@ -590,7 +590,9 @@ public class UserThread extends Thread {
      * handle introduce night part of game
      */
     private void introduceNight(BufferedReader reader) {
-        String serverMessage = "Introduction".toUpperCase(Locale.ROOT) + "NIGHT\n" + "Mafias introduce your rolls:\n";
+        String serverMessage = "Introduction".toUpperCase(Locale.ROOT) + "NIGHT\n";
+        sendMessage(serverMessage);
+        serverMessage = "Mafias introduce your rolls:\n";
         String clientMessage;
         //  server.sendToSpecial(userName, serverMessage);
 
