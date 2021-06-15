@@ -134,6 +134,9 @@ public class UserThread extends Thread {
                     " dead.\n1) Do you want to leave the game?\n Or\n 2) Stay in the game as a spectator?\n";
             sendMessage(serverMessage);
             clientMessage = readFromClient(reader);
+            if (clientMessage == null) {
+                return;
+            }
             if ("1".equalsIgnoreCase(clientMessage)) {
                 serverMessage = "Bye!\n";
                 sendMessage(serverMessage);
@@ -155,6 +158,9 @@ public class UserThread extends Thread {
             sendMessage(serverMessage);
             if (task == Task.NIGHT) {
                 clientMessage = readFromClient(reader);
+                if (clientMessage == null) {
+                    return;
+                }
                 UserThread userToKill = server.findUserByName(clientMessage);
                 server.setWhoGodKilled(userToKill);
                 serverMessage = "Done!\n";
@@ -171,6 +177,9 @@ public class UserThread extends Thread {
                 sendMessage(serverMessage);
                 if (task == Task.NIGHT) {
                     clientMessage = readFromClient(reader);
+                    if (clientMessage == null) {
+                        return;
+                    }
                     UserThread userToKill = server.findUserByName(clientMessage);
                     server.setWhoGodKilled(userToKill);
                     serverMessage = "Done!\n";
@@ -187,12 +196,18 @@ public class UserThread extends Thread {
             serverMessage = "Who do you want god father to kill?\n";
             sendMessage(serverMessage);
             clientMessage = readFromClient(reader);
+                if (clientMessage == null) {
+                    return;
+                }
             server.broadcastToMafias(clientMessage, this);}
             serverMessage = "\nDr.lecter save a mafia.\n";
             //  server.sendToSpecial(userName, serverMessage);
             sendMessage(serverMessage);
             if (task == Task.NIGHT) {
                 clientMessage = readFromClient(reader);
+                if (clientMessage == null) {
+                    return;
+                }
                 if (getUserName().equalsIgnoreCase(clientMessage)) {
                     if (((DrLecter) getRoll()).isSaveHimself() == true) {
                         serverMessage = "You have already saved yourself once. Choose someone else.\n";
@@ -230,12 +245,18 @@ public class UserThread extends Thread {
             sendMessage(serverMessage);
             if (task == Task.NIGHT) {
                 clientMessage = readFromClient(reader);
+                if (clientMessage == null) {
+                    return;
+                }
                 if (getUserName().equalsIgnoreCase(clientMessage)) {
                     if (((Doctor) getRoll()).isSaveHimself() == true) {
                         serverMessage = "You have already saved yourself once. Choose someone else.\n";
                         sendMessage(serverMessage);
 
                         clientMessage = readFromClient(reader);
+                        if (clientMessage == null) {
+                            return;
+                        }
                         if (!getUserName().equalsIgnoreCase(clientMessage)) {
                             server.setDoctorSave(server.findUserByName(clientMessage));
                         }
@@ -260,6 +281,9 @@ public class UserThread extends Thread {
             sendMessage(serverMessage);
             if (task == Task.NIGHT) {
                 clientMessage = readFromClient(reader);
+                if (clientMessage == null) {
+                    return;
+                }
                 UserThread userToInquire = server.findUserByName(clientMessage);
                 if (userToInquire.getRoll() instanceof Citizen) {
                     serverMessage = "This player is a citizen";
@@ -277,11 +301,17 @@ public class UserThread extends Thread {
             sendMessage(serverMessage);
             if (task == Task.NIGHT) {
                 clientMessage = readFromClient(reader);
+                if (clientMessage == null) {
+                    return;
+                }
                 if ("yes".equalsIgnoreCase(clientMessage) || "1".equalsIgnoreCase(clientMessage)) {
                     serverMessage = "Who do you want to kill?\n";
                     // server.sendToSpecial(userName, serverMessage);
                     sendMessage(serverMessage);
                     clientMessage = readFromClient(reader);
+                    if (clientMessage == null) {
+                        return;
+                    }
                     UserThread userToKill = server.findUserByName(clientMessage);
                     //&& !userToKill.equals(server.getDrlecteSave())
                     if (userToKill.getRoll() instanceof Mafia) {
@@ -304,11 +334,17 @@ public class UserThread extends Thread {
             sendMessage(serverMessage);
             if (task == Task.NIGHT) {
                 clientMessage = readFromClient(reader);
+                if (clientMessage == null) {
+                    return;
+                }
                 if ("yes".equalsIgnoreCase(clientMessage) || "1".equalsIgnoreCase(clientMessage)) {
                     serverMessage = "Who do you want to keep quiet during the day? \n";
                     // server.sendToSpecial(userName, serverMessage);
                     sendMessage(serverMessage);
                     clientMessage = readFromClient(reader);
+                    if (clientMessage == null) {
+                        return;
+                    }
                     UserThread userToBeQuiet = server.findUserByName(clientMessage);
                     userToBeQuiet.getRoll().setBeQuietduringTheDay(true);
                     serverMessage = "Done!\n";
@@ -330,6 +366,9 @@ public class UserThread extends Thread {
                 sendMessage(serverMessage);
                 if (task == Task.NIGHT) {
                     clientMessage = readFromClient(reader);
+                    if (clientMessage == null) {
+                        return;
+                    }
                     server.setAnnounceDeletedRolls(false);
                     if ("yes".equalsIgnoreCase(clientMessage) || "1".equalsIgnoreCase(clientMessage)) {
                         server.setAnnounceDeletedRolls(true);
@@ -354,6 +393,9 @@ public class UserThread extends Thread {
         sendMessage(serverMessage);
         if (task == Task.VOTING) {
             clientMessage = readFromClient(reader);
+            if (clientMessage == null) {
+                return;
+            }
             server.getVotesMap().put(clientMessage, server.getVotesMap().get(clientMessage) + 1);
         }
         server.setCancelVoting(false);
@@ -362,6 +404,9 @@ public class UserThread extends Thread {
             sendMessage(serverMessage);
             if (task == Task.VOTING) {
                 clientMessage = readFromClient(reader);
+                if (clientMessage == null) {
+                    return;
+                }
                 if ("yes".equalsIgnoreCase(clientMessage) || "1".equalsIgnoreCase(clientMessage)) {
                     server.setCancelVoting(true);
                 }
@@ -392,6 +437,9 @@ public class UserThread extends Thread {
                 serverMessage = "You are dead.\n1) Do you want to leave the game?\n Or\n 2) Stay in the game as a spectator?\n";
                 sendMessage(serverMessage);
                 clientMessage = readFromClient(reader);
+                if (clientMessage == null) {
+                    return;
+                }
                 if ("1".equalsIgnoreCase(clientMessage)) {
                     serverMessage = "Bye!\n";
                     sendMessage(serverMessage);
@@ -426,9 +474,9 @@ public class UserThread extends Thread {
 
             if (this.getRoll().isAlive() && this.getRoll().isBeQuietDuringTheDay() == false) {
                 clientMessage = readFromClient(reader);
-//            if ("ready".equalsIgnoreCase(clientMessage)) {
-//                server.setReadyToVote(server.getReadyToVote() + 1);
-//            }
+                if (clientMessage == null) {
+                    return;
+                }
                 if ("ready".equalsIgnoreCase(clientMessage)) {
                     break;
                 }
@@ -450,12 +498,24 @@ public class UserThread extends Thread {
         String clientMessage;
         // server.sendToSpecial(userName, serverMessage);
         sendMessage(serverMessage);
-        if (task == Task.START) {
+
+            do{
             clientMessage = readFromClient(reader);
-            if ("start".equalsIgnoreCase(clientMessage)) {
-                server.setWhoSentStarts(server.getWhoSentStarts() + 1);
+                if ("start".equalsIgnoreCase(clientMessage)) {
+                    server.setWhoSentStarts(server.getWhoSentStarts() + 1);
+                }
+                else {
+                    sendMessage("wrong input .try again.\n");
+                }
+
+                if (!task.equals(Task.START) || clientMessage==null) {
+                    return;
+                }
+
             }
-        }
+            while (!clientMessage.equalsIgnoreCase("start"));
+
+
     }
 
     /**
@@ -512,6 +572,7 @@ public class UserThread extends Thread {
      */
     public void userQiutting() {
         String serverMessage;
+
         server.removeUser(userName, this);
         try {
             socket.close();
@@ -553,7 +614,8 @@ public class UserThread extends Thread {
         try {
             clientmessage = reader.readLine();
         } catch (IOException e) {
-            e.printStackTrace();
+         //   e.printStackTrace();
+            server.broadcast(userName+ "disconnected",this);
         }
         if ("history".equalsIgnoreCase(clientmessage)) {
             readDailyChatFile();
