@@ -615,7 +615,9 @@ public class UserThread extends Thread {
             clientmessage = reader.readLine();
         } catch (IOException e) {
          //   e.printStackTrace();
+            this.getRoll().setAlive(false);
             server.broadcast(userName+ "disconnected",this);
+            return null;
         }
         if ("history".equalsIgnoreCase(clientmessage)) {
             readDailyChatFile();
