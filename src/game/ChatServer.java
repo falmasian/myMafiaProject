@@ -28,6 +28,7 @@ public class ChatServer {
     private UserThread whoGodKilled;
     private UserThread whoProfKilled;
     private boolean cancelVoting = false;
+    private  UserThread userWhoShouldDieInVoting;
 
     /**
      * Gets whole dead.
@@ -205,6 +206,7 @@ public class ChatServer {
                         }
                     }
                     votesMap = newListForVoting();
+                    userWhoShouldDieInVoting=null;
                     ExecutorService pool4 = Executors.newCachedThreadPool();
                     for (UserThread user : userThreads) {
                         user.setTask(Task.VOTING);
@@ -216,7 +218,7 @@ public class ChatServer {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    if (cancelVoting == true) {
+                    if (cancelVoting == false) {
                         Map.Entry<String, Integer> maxEntry = null;
 
                         for (Map.Entry<String, Integer> entry : votesMap.entrySet()) {
@@ -224,8 +226,8 @@ public class ChatServer {
                                 maxEntry = entry;
                             }
                         }
-                        UserThread user = findUserByName(maxEntry.getKey());
-                        removeUser(maxEntry.getKey(), user);
+                         userWhoShouldDieInVoting = findUserByName(maxEntry.getKey());
+                        userWhoShouldDieInVoting.getRoll().setAlive(false);
                     }
                     for (UserThread userThread : userThreads) {
                         userThread.getRoll().setBeQuietduringTheDay(false);
@@ -260,7 +262,7 @@ public class ChatServer {
                         addLastNightDead(whoProfKilled);
                         whoProfKilled.getRoll().setAlive(false);
                     }
-                    System.out.println(endOfGame());
+
 
                 }
 
@@ -614,6 +616,21 @@ public class ChatServer {
         return alive;
     }
 
+
+    /**
+     * Is god father alive boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isGodFatherAlive(){
+        for (UserThread user : userThreads) {
+            if (user.getRoll() instanceof Godfather && user.getRoll().isAlive()==true) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Gets drlecte save.
      *
@@ -667,6 +684,14 @@ public class ChatServer {
         }
     }
 
+    /**
+     * Gets user who should die in voting.
+     *
+     * @return the user who should die in voting
+     */
+    public UserThread getUserWhoShouldDieInVoting() {
+        return userWhoShouldDieInVoting;
+    }
 
     /**
      * The entry point of application.
